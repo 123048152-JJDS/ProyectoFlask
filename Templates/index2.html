@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas con Flask</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1000px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        #taskInput {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        #taskInput:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        #addTaskBtn {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        #addTaskBtn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .tables-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .table-wrapper {
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .table-title i {
+            font-size: 1.3rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #34495e;
+        }
+        
+        .task-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .complete-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .complete-btn:hover {
+            background: #27ae60;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        .completed td {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+        
+        .empty-row td {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 30px;
+            font-style: italic;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-number {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        
+        .server-info {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .server-info h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .tables-container {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tasks"></i> Lista de Tareas</h1>
+            <p class="subtitle">Interfaz JavaScript con Backend Python</p>
+        </header>
+        
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Escribe una nueva tarea...">
+            <button id="addTaskBtn">Agregar Tarea</button>
+        </div>
+        
+        <div class="tables-container">
+            <div class="table-wrapper">
+                <h2 class="table-title"><i class="fas fa-list"></i> Tareas Pendientes</h2>
+                <table id="pendingTable">
+                    <thead>
+                        <tr>
+                            <th width="60%">Tarea</th>
+                            <th width="40%">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTasks">
+                        <tr>
+                            <td>Estudiar para el examen de matemáticas</td>
+                            <td>
+                                <button class="action-btn complete-btn">
+                                    Completar
+                                </button>
+                                <button class="action-btn delete-btn">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Comprar víveres en el supermercado</td>
+                            <td>
+                                <button class="action-btn complete-btn">
+                                    Completar
+                                </button>
+                                <button class="action-btn delete-btn">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <h2 class="table-title"><i class="fas fa-check-circle"></i> Tareas Completadas</h2>
+                <table id="completedTable">
+                    <thead>
+                        <tr>
+                            <th width="60%">Tarea</th>
+                            <th width="40%">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completedTasks">
+                        <tr class="completed">
+                            <td>Hacer ejercicio en el gimnasio</td>
+                            <td>
+                                <button class="action-btn delete-btn">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span>Total de tareas:</span>
+                <span class="stat-number" id="totalTasks">3</span>
+            </div>
+            <div class="stat-item">
+                <span>Pendientes:</span>
+                <span class="stat-number" id="pendingCount">2</span>
+            </div>
+            <div class="stat-item">
+                <span>Completadas:</span>
+                <span class="stat-number" id="completedCount">1</span>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>¿Cómo funciona?</h3>
+            <ul>
+                <li><strong>Frontend (JavaScript):</strong> Interfaz de usuario que permite agregar, completar y eliminar tareas</li>
+                <li><strong>Backend (Python Flask):</strong> Maneja la lógica de negocio y almacenamiento de datos</li>
+                <li><strong>Comunicación:</strong> El navegador envía solicitudes HTTP al servidor Python</li>
+                <li><strong>Persistencia:</strong> Las tareas se almacenan en el servidor para mantener el estado</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="server-info">
+        <h2><i class="fas fa-server"></i> Implementación del Servidor Python</h2>
+        
+        <div class="code-block">
+            <pre># app.py - Backend en Python con Flask
+from flask import Flask, jsonify, request, render_template
+
+app = Flask(__name__)
+
+# Almacenamiento de tareas (en producción usar base de datos)
+tareas = {
+    "pendientes": [
+        {"id": 1, "texto": "Estudiar para el examen de matemáticas"},
+        {"id": 2, "texto": "Comprar víveres en el supermercado"}
+    ],
+    "completadas": [
+        {"id": 3, "texto": "Hacer ejercicio en el gimnasio"}
+    ]
+}
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/tareas', methods=['GET'])
+def obtener_tareas():
+    return jsonify(tareas)
+
+@app.route('/api/tareas/pendientes', methods=['POST'])
+def agregar_tarea():
+    nueva_tarea = request.json
+    if not nueva_tarea or 'texto' not in nueva_tarea:
+        return jsonify({"error": "Datos inválidos"}), 400
+    
+    # Crear nueva tarea con ID único
+    nueva_id = max([t['id'] for t in tareas['pendientes'] + tareas['completadas']], default=0) + 1
+    tarea = {"id": nueva_id, "texto": nueva_tarea['texto']}
+    
+    tareas['pendientes'].append(tarea)
+    return jsonify(tarea), 201
+
+@app.route('/api/tareas/completar/<int:tarea_id>', methods=['PUT'])
+def completar_tarea(tarea_id):
+    # Buscar tarea en pendientes
+    for i, tarea in enumerate(tareas['pendientes']):
+        if tarea['id'] == tarea_id:
+            # Mover a completadas
+            tarea_completada = tareas['pendientes'].pop(i)
+            tareas['completadas'].append(tarea_completada)
+            return jsonify(tarea_completada), 200
+    
+    return jsonify({"error": "Tarea no encontrada"}), 404
+
+@app.route('/api/tareas/<int:tarea_id>', methods=['DELETE'])
+def eliminar_tarea(tarea_id):
+    # Buscar en pendientes
+    for i, tarea in enumerate(tareas['pendientes']):
+        if tarea['id'] == tarea_id:
+            tareas['pendientes'].pop(i)
+            return jsonify({"mensaje": "Tarea eliminada"}), 200
+    
+    # Buscar en completadas
+    for i, tarea in enumerate(tareas['completadas']):
+        if tarea['id'] == tarea_id:
+            tareas['completadas'].pop(i)
+            return jsonify({"mensaje": "Tarea eliminada"}), 200
+    
+    return jsonify({"error": "Tarea no encontrada"}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)</pre>
+        </div>
+        
+        <div class="instructions">
+            <h3>Endpoints de la API</h3>
+            <ul>
+                <li><strong>GET /api/tareas</strong> - Obtener todas las tareas</li>
+                <li><strong>POST /api/tareas/pendientes</strong> - Agregar nueva tarea pendiente</li>
+                <li><strong>PUT /api/tareas/completar/{id}</strong> - Mover tarea a completadas</li>
+                <li><strong>DELETE /api/tareas/{id}</strong> - Eliminar tarea</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Variables para almacenar tareas
+        let tasks = {
+            pending: [
+                { id: 1, text: "Estudiar para el examen de matemáticas" },
+                { id: 2, text: "Comprar víveres en el supermercado" }
+            ],
+            completed: [
+                { id: 3, text: "Hacer ejercicio en el gimnasio" }
+            ]
+        };
+        
+        // Referencias a elementos del DOM
+        const taskInput = document.getElementById('taskInput');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const pendingTasks = document.getElementById('pendingTasks');
+        const completedTasks = document.getElementById('completedTasks');
+        const totalTasks = document.getElementById('totalTasks');
+        const pendingCount = document.getElementById('pendingCount');
+        const completedCount = document.getElementById('completedCount');
+        
+        // Inicializar la aplicación
+        function init() {
+            // Renderizar tareas
+            renderTasks();
+            
+            // Actualizar estadísticas
+            updateStats();
+            
+            // Configurar event listeners
+            addTaskBtn.addEventListener('click', addTask);
+            taskInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
+        }
+        
+        // Agregar nueva tarea (simulando comunicación con backend)
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            
+            if (taskText === '') {
+                alert('Por favor, escribe una tarea');
+                return;
+            }
+            
+            // Simular llamada al backend
+            simulateServerCall('POST', '/api/tareas/pendientes', { text: taskText })
+                .then(newTask => {
+                    // Agregar a tareas pendientes
+                    tasks.pending.push(newTask);
+                    
+                    // Renderizar tareas
+                    renderTasks();
+                    
+                    // Actualizar estadísticas
+                    updateStats();
+                    
+                    // Limpiar input
+                    taskInput.value = '';
+                    taskInput.focus();
+                })
+                .catch(error => {
+                    console.error('Error al agregar tarea:', error);
+                    alert('Hubo un error al agregar la tarea');
+                });
+        }
+        
+        // Completar tarea (simulando comunicación con backend)
+        function completeTask(taskId) {
+            // Simular llamada al backend
+            simulateServerCall('PUT', `/api/tareas/completar/${taskId}`)
+                .then(completedTask => {
+                    // Encontrar la tarea en pendientes
+                    const taskIndex = tasks.pending.findIndex(task => task.id === taskId);
+                    
+                    if (taskIndex !== -1) {
+                        // Mover la tarea de pendientes a completadas
+                        const task = tasks.pending.splice(taskIndex, 1)[0];
+                        tasks.completed.push(task);
+                        
+                        // Renderizar tareas
+                        renderTasks();
+                        
+                        // Actualizar estadísticas
+                        updateStats();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al completar tarea:', error);
+                    alert('Hubo un error al completar la tarea');
+                });
+        }
+        
+        // Eliminar tarea (simulando comunicación con backend)
+        function deleteTask(taskId, isCompleted) {
+            // Simular llamada al backend
+            simulateServerCall('DELETE', `/api/tareas/${taskId}`)
+                .then(() => {
+                    if (isCompleted) {
+                        // Eliminar de completadas
+                        const taskIndex = tasks.completed.findIndex(task => task.id === taskId);
+                        if (taskIndex !== -1) {
+                            tasks.completed.splice(taskIndex, 1);
+                        }
+                    } else {
+                        // Eliminar de pendientes
+                        const taskIndex = tasks.pending.findIndex(task => task.id === taskId);
+                        if (taskIndex !== -1) {
+                            tasks.pending.splice(taskIndex, 1);
+                        }
+                    }
+                    
+                    // Renderizar tareas
+                    renderTasks();
+                    
+                    // Actualizar estadísticas
+                    updateStats();
+                })
+                .catch(error => {
+                    console.error('Error al eliminar tarea:', error);
+                    alert('Hubo un error al eliminar la tarea');
+                });
+        }
+        
+        // Renderizar todas las tareas
+        function renderTasks() {
+            // Limpiar tablas
+            pendingTasks.innerHTML = '';
+            completedTasks.innerHTML = '';
+            
+            // Renderizar tareas pendientes
+            if (tasks.pending.length === 0) {
+                pendingTasks.innerHTML = `
+                    <tr class="empty-row">
+                        <td colspan="2">No hay tareas pendientes</td>
+                    </tr>
+                `;
+            } else {
+                tasks.pending.forEach(task => {
+                    const row = createTaskRow(task, false);
+                    pendingTasks.appendChild(row);
+                });
+            }
+            
+            // Renderizar tareas completadas
+            if (tasks.completed.length === 0) {
+                completedTasks.innerHTML = `
+                    <tr class="empty-row">
+                        <td colspan="2">No hay tareas completadas</td>
+                    </tr>
+                `;
+            } else {
+                tasks.completed.forEach(task => {
+                    const row = createTaskRow(task, true);
+                    completedTasks.appendChild(row);
+                });
+            }
+        }
+        
+        // Crear fila de tabla para una tarea
+        function createTaskRow(task, isCompleted) {
+            const row = document.createElement('tr');
+            
+            if (isCompleted) {
+                row.classList.add('completed');
+            }
+            
+            const taskCell = document.createElement('td');
+            taskCell.className = 'task-cell';
+            taskCell.innerHTML = `
+                <span>${task.text}</span>
+            `;
+            
+            const actionCell = document.createElement('td');
+            
+            if (isCompleted) {
+                actionCell.innerHTML = `
+                    <button class="action-btn delete-btn" onclick="deleteTask(${task.id}, true)">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                `;
+            } else {
+                actionCell.innerHTML = `
+                    <button class="action-btn complete-btn" onclick="completeTask(${task.id})">
+                        <i class="fas fa-check"></i> Completar
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteTask(${task.id}, false)">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                `;
+            }
+            
+            row.appendChild(taskCell);
+            row.appendChild(actionCell);
+            
+            return row;
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const total = tasks.pending.length + tasks.completed.length;
+            totalTasks.textContent = total;
+            pendingCount.textContent = tasks.pending.length;
+            completedCount.textContent = tasks.completed.length;
+        }
+        
+        // Simular llamada al servidor (en un entorno real se usaría fetch)
+        function simulateServerCall(method, url, data = null) {
+            return new Promise((resolve, reject) => {
+                // Simular retardo de red
+                setTimeout(() => {
+                    console.log(`Llamada a ${method} ${url}`);
+                    
+                    if (method === 'POST' && url === '/api/tareas/pendientes') {
+                        // Crear nueva tarea
+                        const newId = Math.max(...tasks.pending.map(t => t.id), ...tasks.completed.map(t => t.id), 0) + 1;
+                        const newTask = {
+                            id: newId,
+                            text: data.text
+                        };
+                        resolve(newTask);
+                    }
+                    else if (method === 'PUT' && url.startsWith('/api/tareas/completar/')) {
+                        const taskId = parseInt(url.split('/').pop());
+                        const task = tasks.pending.find(t => t.id === taskId);
+                        
+                        if (task) {
+                            resolve(task);
+                        } else {
+                            reject({ status: 404, message: 'Tarea no encontrada' });
+                        }
+                    }
+                    else if (method === 'DELETE' && url.startsWith('/api/tareas/')) {
+                        const taskId = parseInt(url.split('/').pop());
+                        resolve({ id: taskId });
+                    }
+                    else {
+                        reject({ status: 404, message: 'Endpoint no encontrado' });
+                    }
+                }, 500); // Simular 500ms de retardo
+            });
+        }
+        
+        // Hacer funciones disponibles globalmente para los eventos onclick
+        window.completeTask = completeTask;
+        window.deleteTask = deleteTask;
+        
+        // Iniciar la aplicación cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.input-section {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#taskInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#addTaskBtn {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#addTaskBtn:hover {
+    background-color: #4cae4c;
+}
+
+.tables-container {
+    display: flex;
+    gap: 20px;
+}
+
+.table-wrapper {
+    flex: 1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 3px;
+}
+
+.complete-btn {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.complete-btn:hover {
+    background-color: #46b8da;
+}
+
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #bbdefb, #90caf9);
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        header h1 {
+            color: #1976d2;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        header h1 i {
+            margin-right: 15px;
+            color: #ff9800;
+        }
+        
+        .subtitle {
+            color: #546e7a;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+        
+        .input-section {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(25, 118, 210, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        #taskInput {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            background: white;
+            font-size: 1.1rem;
+            color: #37474f;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        #taskInput:focus {
+            background: #f5f9ff;
+        }
+        
+        #taskInput::placeholder {
+            color: #90a4ae;
+        }
+        
+        #addTaskBtn {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            padding: 0 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #addTaskBtn:hover {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            transform: translateY(-2px);
+        }
+        
+        #addTaskBtn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .tables-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .table-wrapper {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border-top: 4px solid #2196f3;
+        }
+        
+        .table-wrapper.completed {
+            border-top: 4px solid #4caf50;
+        }
+        
+        .table-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-title {
+            color: #1976d2;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e3f2fd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .table-title.completed {
+            color: #4caf50;
+        }
+        
+        .table-title i {
+            font-size: 1.6rem;
+            background: #e3f2fd;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .table-title.completed i {
+            background: #e8f5e9;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        
+        thead th {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        
+        thead th.completed {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        tbody tr {
+            background: #fafafa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+        
+        td {
+            padding: 18px 15px;
+            color: #37474f;
+            border-radius: 10px;
+        }
+        
+        .task-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .task-cell i {
+            color: #78909c;
+            font-size: 1.2rem;
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .complete-btn {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .complete-btn:hover {
+            background: linear-gradient(135deg, #43a047, #1b5e20);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #f44336, #c62828);
+            color: white;
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+        }
+        
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #e53935, #b71c1c);
+            box-shadow: 0 6px 15px rgba(244, 67, 54, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .empty-row td {
+            text-align: center;
+            color: #90a4ae;
+            padding: 40px 20px;
+            font-style: italic;
+            font-size: 1.1rem;
+            background: transparent;
+            box-shadow: none;
+        }
+        
+        .empty-row td i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 15px;
+            color: #cfd8dc;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(13, 71, 161, 0.2);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(25, 118, 210, 0.15);
+            font-size: 18rem;
+            font-weight: 900;
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 900px) {
+            .tables-container {
+                flex-direction: column;
+            }
+            
+            .watermark {
+                font-size: 12rem;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .input-section {
+                flex-direction: column;
+            }
+            
+            #addTaskBtn {
+                padding: 15px;
+                margin-top: 10px;
+            }
+            
+            .watermark {
+                font-size: 8rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }

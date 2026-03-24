@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+        <label id="lblNombre">Nombre</label>
+        <input id="txtNombre" placeholder="nombre">
+        <button id="btnNombre" type="button" onclick="Nombre()">Aceptar</button>
+        
+        <hr>
+        <br>
+        <h2>Calculadora</h2>
+        <input id="txtValorUno" placeholder="Primer valor" min="0" max="1000">
+        <input id="txtValorDos" placeholder="Segundo valor" min="0" max="1000">
+        <input id="txtOperacion" placeholder="Operación: S, R, M, D">
+
+        <input id="txtResultado" placeholder="Resultado" disabled>
+        <button id="btnCalcular" type="button" onclick="Calcular()">Calcular</button>
+        <hr>
+        <select id="selOperation" onchange="Calcular(this.value)">
+            <option value="0" select>Seleccionar...</option>
+            <option value="S">Suma</option>
+            <option value="R">Resta</option>
+            <option value="D">Division</option>
+            <option value="M">Multiplicacion</option>
+        </select>
+
+        <hr>
+        <button id="btnCiclos" type="button" onclick="Ciclos()">Ciclos</button>
+        
+
+        <hr>
+        <h2>Adivina el número (1 al 100)</h2>
+            <input type="number" id="intento" placeholder="ingresa tu número" />
+            <button onclick="verificarIntento()">Probar</button>
+            <p id="mensaje"></p>
+            <p id="intentos">Intentos: 0</p>
+            <button onclick="reiniciarJuego()">Reiniciar</button>
+        <hr>
+        
+        <script src="{{ url_for('static', filename='Actividad.js') }}"></script>
+    </body>
+</html>

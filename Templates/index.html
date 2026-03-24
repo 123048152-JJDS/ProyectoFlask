@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Tareas</h1>
+        
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Escribe una nueva tarea...">
+            <button id="addTaskBtn">Agregar Tarea</button>
+        </div>
+        
+        <div class="tables-container">
+            <div class="table-wrapper">
+                <h2>Tareas Pendientes</h2>
+                <table id="pendingTable">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTasks">
+                        {% for tarea in tareas.pendientes %}
+                        <tr>
+                            <td>{{ tarea.texto }}</td>
+                            <td>
+                                <button class="complete-btn" data-id="{{ tarea.id }}">Completar</button>
+                                <button class="delete-btn" data-id="{{ tarea.id }}" data-completed="false">Eliminar</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <h2>Tareas Completadas</h2>
+                <table id="completedTable">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completedTasks">
+                        {% for tarea in tareas.completadas %}
+                        <tr>
+                            <td>{{ tarea.texto }}</td>
+                            <td>
+                                <button class="delete-btn" data-id="{{ tarea.id }}" data-completed="true">Eliminar</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
